@@ -34,7 +34,7 @@
 
 
  <div class="scp-quizzes-data" id="question2">
-  <h3>2. How would you insert pre-written code into a current program ?</h3>
+  <h3>2. What is the output of the below c code?</h3>
    <pre>#include&lt;stdio.h>	
    main() 
    {
@@ -42,19 +42,19 @@
       
       if(x=5)
       {	
-         if(x=5) printf("Fast");
+         if(x=4) printf("Fast");
       } 
       printf("learning");
    }</pre>
    <br/>
    <input type="radio" name="question2">
-   <label option="A" question="2">A. #read&lt;file></label><br/>
+   <label option="A" question="2">A. Fastlearning</label><br/>
    <input type="radio"  name="question2">
-   <label option="B" question="2">B. #get &lt;file></label><br/>
+   <label option="B" question="2">B. learning</label><br/>
    <input type="radio" name="question2">
-   <label option="C" question="2">C. #include &lt;file></label> <br/>
+   <label option="C" question="2">C. learningFast</label> <br/>
    <input type="radio" name="question2">
-   <label option="D" question="2">D. #pre &lt;file></label> 
+   <label option="D" question="2">D. Fast</label> 
 </div>
 
 <div>
@@ -66,27 +66,11 @@
 </div>
 
 <script type="text/javascript">
-   var selectedOptions = [];
-   var anwser = ["C", "D"];
    var timeLimit = 1 * 10;
    var timerInterval;
-   var timerDisplay = document.querySelector('#time-remaining');
-
-   function clickLabelToChooseOption(label) {
-      var selectedOption = $(label).attr('option');
-      //var question = label.parentElement.id.toString().substring(8);
-      var question = $(label).attr('question');
-      selectedOptions[question-1] = selectedOption
-      console.log(selectedOptions)
-      $(label.parentElement).find('label').removeClass('option-selected');
-      $(label).addClass('option-selected');
-   }
-
-   function addAtionListenerToLabel() {
-      $('label').click(function() {
-         clickLabelToChooseOption(this);
-      });
-   }
+   var timerDisplay = $('#time-remaining');
+   var selectedOptions = [];
+   var anwser = ["A", "B"];
 
    function startTimer(duration, display) {
 		var timer = duration, minutes, seconds;
@@ -95,13 +79,13 @@
 			seconds = parseInt(timer % 60, 10);
 			minutes = minutes < 10 ? "0" + minutes : minutes;
 			seconds = seconds < 10 ? "0" + seconds : seconds;
-			display.textContent = "Timer: " + minutes + ":" + seconds;
+			timerDisplay.html("Timer: " + minutes + ":" + seconds);
 			if (--timer < 0) {
 				timer = 0;
 				setTimeout(function() {
-					var r = confirm("Time up!");
-					if (r == true) {
-						document.getElementById('submit').click();
+					var confirmResult = confirm("Time up!");
+					if (confirmResult == true) {
+						$('#submit').click();
 					} else {
 						alert("You are cheating !!!");
 					}
@@ -110,9 +94,24 @@
 			}
 		}, 1000);
 	}
+
+   function clickLabelToChooseOption(label) {
+      var selectedOption = $(label).attr('option');
+      var question = $(label).attr('question');
+      selectedOptions[question-1] = selectedOption;
+      $(label.parentElement).find('label').removeClass('option-selected');
+      $(label).addClass('option-selected');
+   }
+
+   function addOnClickEventToAllOptions() {
+      $('label').click(function() {
+         clickLabelToChooseOption(this);
+      });
+   }
    
    $(document).ready(function() {
-      addAtionListenerToLabel();
+      startTimer(timeLimit, timerDisplay);
+      addOnClickEventToAllOptions();
 
       $('#submit').click(function() {
          clearInterval(timerInterval);
@@ -131,7 +130,7 @@
       });
 
       $('#reset').click(function() {
-         addAtionListenerToLabel();
+         addOnClickEventToAllOptions();
          $('label').removeClass('option-selected');
          $('label').removeClass('correct-answer');
          $('label').removeClass('wrong-answer');
@@ -139,7 +138,6 @@
          $('#score').html('Score: 0');
          startTimer(timeLimit, timerDisplay);
       });
-		startTimer(timeLimit, timerDisplay);
    });
 </script>
 </body>
