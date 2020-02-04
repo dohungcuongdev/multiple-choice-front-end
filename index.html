@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+   <head>
+      <title>C Programming Language Output this code Quizzes 1</title>
+      <link rel="stylesheet" type="text/css" href="./css/style.css" />
+      <script src="http://www.fastlearning.in/controller/js/jquery-1.9.1.min.js"></script>
+   </head>
+   <body >
+<div class="scp-quizzes-main">
+<div id="time-remaining">Timer: 00:10</div>
+<div class="scp-quizzes-data" id="question1">
+  <h3>1. What is the output of the below c code?</h3>
+   <pre>#include&lt;stdio.h>	
+   main() 
+   {
+      int x = 5;
+      
+      if(x=5)
+      {	
+         if(x=5) printf("Fast");
+      } 
+      printf("learning");
+   }</pre>
+   <br/>
+   <input type="radio" name="question1">
+   <label option="A" question="1">A. Fastlearning</label><br/>
+   <input type="radio"  name="question1">
+   <label option="B" question="1">B. learning</label><br/>
+   <input type="radio" name="question1">
+   <label option="C" question="1">C. learningFast</label> <br/>
+   <input type="radio" name="question1">
+   <label option="D" question="1">D. Fast</label> 
+</div>
+
+
+ <div class="scp-quizzes-data" id="question2">
+  <h3>2. How would you insert pre-written code into a current program ?</h3>
+   <pre>#include&lt;stdio.h>	
+   main() 
+   {
+      int x = 5;
+      
+      if(x=5)
+      {	
+         if(x=5) printf("Fast");
+      } 
+      printf("learning");
+   }</pre>
+   <br/>
+   <input type="radio" name="question2">
+   <label option="A" question="2">A. #read&lt;file></label><br/>
+   <input type="radio"  name="question2">
+   <label option="B" question="2">B. #get &lt;file></label><br/>
+   <input type="radio" name="question2">
+   <label option="C" question="2">C. #include &lt;file></label> <br/>
+   <input type="radio" name="question2">
+   <label option="D" question="2">D. #pre &lt;file></label> 
+</div>
+
+<div>
+   <div id="score">Score: 0</div>
+   <br>
+   <button id="submit">Submit</button>
+   <button id="reset">Reset</button>
+</div>
+</div>
+
+<script type="text/javascript">
+   var selectedOptions = [];
+   var anwser = ["C", "D"];
+   var timeLimit = 1 * 10;
+   var timerInterval;
+   var timerDisplay = document.querySelector('#time-remaining');
+
+   function clickLabelToChooseOption(label) {
+      var selectedOption = $(label).attr('option');
+      //var question = label.parentElement.id.toString().substring(8);
+      var question = $(label).attr('question');
+      selectedOptions[question-1] = selectedOption
+      console.log(selectedOptions)
+      $(label.parentElement).find('label').removeClass('option-selected');
+      $(label).addClass('option-selected');
+   }
+
+   function addAtionListenerToLabel() {
+      $('label').click(function() {
+         clickLabelToChooseOption(this);
+      });
+   }
+
+   function startTimer(duration, display) {
+		var timer = duration, minutes, seconds;
+		timerInterval = setInterval(function() {
+			minutes = parseInt(timer / 60, 10);
+			seconds = parseInt(timer % 60, 10);
+			minutes = minutes < 10 ? "0" + minutes : minutes;
+			seconds = seconds < 10 ? "0" + seconds : seconds;
+			display.textContent = "Timer: " + minutes + ":" + seconds;
+			if (--timer < 0) {
+				timer = 0;
+				setTimeout(function() {
+					var r = confirm("Time up!");
+					if (r == true) {
+						document.getElementById('submit').click();
+					} else {
+						alert("You are cheating !!!");
+					}
+					clearInterval(timerInterval);
+				}, timer);
+			}
+		}, 1000);
+	}
+   
+   $(document).ready(function() {
+      addAtionListenerToLabel();
+
+      $('#submit').click(function() {
+         clearInterval(timerInterval);
+         $('label').off();
+         var score = 0;
+         for(i = 0; i < anwser.length; i++) {
+            var label = $("label[option='" + anwser[i] + "'][question='" + (i+1) + "']");
+            if(selectedOptions[i] === anwser[i]) {
+               $(label).addClass('correct-answer');
+               score++;
+            } else {
+               $(label).addClass('wrong-answer');
+            }
+         }
+         $('#score').html('Score: ' + score);
+      });
+
+      $('#reset').click(function() {
+         addAtionListenerToLabel();
+         $('label').removeClass('option-selected');
+         $('label').removeClass('correct-answer');
+         $('label').removeClass('wrong-answer');
+         selectedOptions = [];
+         $('#score').html('Score: 0');
+         startTimer(timeLimit, timerDisplay);
+      });
+		startTimer(timeLimit, timerDisplay);
+   });
+</script>
+</body>
+</html>
